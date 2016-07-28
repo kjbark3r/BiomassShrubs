@@ -42,6 +42,42 @@ if (file.exists(wd_workcomp)) {
 }
 rm(wd_workcomp, wd_laptop)
 
+
+##########
+## SHRUBS
+
+# equations to estimate biomass
+shrub.eqn <- read.csv("shrub-biomass-equations.csv")
+  shrub.eqn$Species <- as.character(shrub.eqn$Species)
+
+# measured shrub data - per quadrat
+quadrat.shrub <- sqlQuery(channel, paste("select * from MeasurePlants"))
+colnames(quadrat.shrub) <- c("Date", "PlotID", "PlotM", "Species", "Basal1", "Basal2", "Basal3", 
+                     "Basal4", "Basal5", "nStems")
+quadrat.shrub$Species <- trimws(quadrat.shrub$Species)
+quadrat.shrub[, 5:9][quadrat.shrub[, 5:9] == 0] <- NA #make 0s NAs so averaging works
+quadrat.shrub <- quadrat.shrub %>%
+  mutate(PlotVisit = paste(PlotID, ".", Date, sep="")) %>%
+  mutate(QuadratVisit = paste(PlotID,".", Date,".",PlotM, sep=""))
+quadrat.shrub$AvgBasal <- rowMeans(subset(quadrat.shrub, select = (Basal1:Basal5)), na.rm=TRUE)
+
+plot.shrub <- quadrat.shrub %>%
+  group_by(PlotVisit, Species) %>%
+  summarise(Basal = mean(TotalBasal)) %>%
+  left_join(shrub.eqn, by = "Species")
+
+# equation functions
+eqnL <- function(x, a, b) {
+  grams <- ax + b
+  return(grams)
+}
+
+eqnE <- 
+
+eqnP <- 
+
+
+
 # LIFE FORM 
 spp <- sqlQuery(channel, paste("select PlantCode, LifeForm, NameScientific
                                  from NSERP_SP_list"))
@@ -63,9 +99,7 @@ for(i in 1:nrow(classn)) {
                                ifelse(grepl('UNK ', classn$Species[i]), "forb", next))
 }
 
-# COVER - creating manually because some recorded numbers are incorrect
-####### PROB NEED IFELSE - IF SHRUBS, CALCULATE BASED ON GAP ##########  
-  ####### OR DO SHRUBS SEPARTELY AND JOIN BACK TOGETHER ##########  
+# HERBACEOUS COVER - creating manually because some recorded numbers are incorrect
 cover <- classn %>%
   subset(!PlotM == 10 & !PlotM == 30) %>% #remove non-clipplots
   group_by(QuadratVisit, LifeForm) %>%
@@ -155,3 +189,8 @@ biomass <- full_join(herb, forage, by = "PlotVisit") %>%
          ForageForbBiomass, ForageGrassBiomass, ForageHerbBiomass)
 
 write.csv(biomass, file = "biomass-phenology.csv", row.names = FALSE)
+
+
+
+
+

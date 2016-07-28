@@ -20,11 +20,21 @@ my next steps
 			- b
 			- Source (of function)
 		- **ADD CHRVIS TO THIS SPREADSHEET (GENERAL E EQN)
-	- write R code that relates shrub species 
+	- write R code that relates shrub species to biomass equation
 		***trimws() [ARTTRI has one, not sure which others]
+		- make 0s NAs
+		- calculate average basal diameter per quadrat per species
+			- multiply by #stems in quadrat => total mm in quadrat PER SPECIES
+		- 
+
+		- average quadrats to get mm/m in plot
+		- join df with eqn df by species
+		- 
 
 
 
 decisions/misc stuff i did
 	- CHRVIS - no equation in spreadsheet. Used general equation because 
 	  rabbitbrush is similar to sagebrush, and sagebrush uses general eqn
+	- VACCAE - no leaf equation in spreadsheet. Used VACSCO leaf equation 
+	  because it looks more similar to VACSCO than VACMEM
