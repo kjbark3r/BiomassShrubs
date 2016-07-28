@@ -12,24 +12,24 @@ for each species
 		- x = basal diam (mm)
 
 my next steps
-	- create version of spreadsheet that contains these columns:
-		- SpeciesCode
-		- For both leaves and stems (with unique column names):
-			- Function (tells equation type)
-			- a
-			- b
-			- Source (of function)
-		- **ADD CHRVIS TO THIS SPREADSHEET (GENERAL E EQN)
+	X- create version of spreadsheet that contains these columns:
+		X- SpeciesCode
+		X- For both leaves and stems (with unique column names):
+			X- Function (tells equation type)
+			X- a
+			X- b
+			X- Source (of function)
+		X- **ADD CHRVIS TO THIS SPREADSHEET (GENERAL E EQN)
 	- write R code that relates shrub species to biomass equation
-		***trimws() [ARTTRI has one, not sure which others]
-		- make 0s NAs
-		- calculate average basal diameter per quadrat per species
-			- multiply by #stems in quadrat => total mm in quadrat PER SPECIES
-		- 
-
-		- average quadrats to get mm/m in plot
-		- join df with eqn df by species
-		- 
+		X***trimws() [ARTTRI has one, not sure which others]
+		X- make 0s NAs
+		X- calculate average basal diameter per quadrat per species
+			X- multiply by #stems in quadrat => total mm in quadrat PER SPECIES
+		X- average quadrats to get mm/m in plot
+		X- join df with eqn df by species
+		- write function for each... function
+		- for each row,
+			- $g.Lvs <- whichever function.Leaves($basalmm, $a.Leaves, $b.Leaves)
 
 
 
@@ -37,4 +37,4 @@ decisions/misc stuff i did
 	- CHRVIS - no equation in spreadsheet. Used general equation because 
 	  rabbitbrush is similar to sagebrush, and sagebrush uses general eqn
 	- VACCAE - no leaf equation in spreadsheet. Used VACSCO leaf equation 
-	  because it looks more similar to VACSCO than VACMEM
+	  (from NSERP) because it looks more similar to VACSCO than VACMEM

@@ -61,21 +61,41 @@ quadrat.shrub <- quadrat.shrub %>%
   mutate(QuadratVisit = paste(PlotID,".", Date,".",PlotM, sep=""))
 quadrat.shrub$AvgBasal <- rowMeans(subset(quadrat.shrub, select = (Basal1:Basal5)), na.rm=TRUE)
 
-plot.shrub <- quadrat.shrub %>%
+shrub <- quadrat.shrub %>%
   group_by(PlotVisit, Species) %>%
-  summarise(Basal = mean(TotalBasal)) %>%
-  left_join(shrub.eqn, by = "Species")
+  summarise(Basal = mean(AvgBasal)) %>%
+  left_join(shrub.eqn, by = "Species") %>%
+  ungroup()
 
 # equation functions
-eqnL <- function(x, a, b) {
-  grams <- ax + b
+L <- function(x, a, b) {
+  grams <- a*x + b
   return(grams)
 }
 
-eqnE <- 
+E <- function(x, a, b) {
+  grams <- a*(exp(1)^(b*x))
+  return(grams)
+}
 
-eqnP <- 
+P <- function(x, a, b) {
+  grams <- a*(x^b)
+  return(grams)
+}
 
+
+shrub$g.Leaves <- ifelse(shrub$fcn.Leaves == "E", E(shrub$Basal, shrub$a.Leaves, shrub$b.Leaves), 
+                        ifelse(shrub$fcn.Leaves == "L", L(shrub$Basal, shrub$a.Leaves, shrub$b.Leaves),
+                               ifelse(shrub$fcn.Leaves == "P", P(shrub$Basal, shrub$a.Leaves, shrub$b.Leaves),
+                                      NA)))
+shrub$g.Stems <- ifelse(shrub$fcn.Stems == "E", E(shrub$Basal, shrub$a.Stems, shrub$b.Stems), 
+                         ifelse(shrub$fcn.Stems == "L", L(shrub$Basal, shrub$a.Stems, shrub$b.Stems),
+                                ifelse(shrub$fcn.Stems == "P", P(shrub$Basal, shrub$a.Stems, shrub$b.Stems),
+                                       NA)))
+shrub <- shrub %>% mutate(ShrubBiomass = g.Leaves+g.Stems)
+
+
+  
 
 
 # LIFE FORM 
